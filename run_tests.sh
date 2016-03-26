@@ -1,9 +1,65 @@
 #!/bin/sh
 make clean
+echo "*****************************************"
 rm cipher
 rm *.o
+echo "*****************************************"
+
+echo "check (no) C library func on files?"
+echo "fopen", `grep -rn './' -e 'fopen' --include=\*.{c,h} | wc -l`, ">>>>>>>>>>>>>>>>>>>>>>>>>>>"
+grep -rn './' -e 'fopen' --include=\*.{c,h} -B 2 -A 2
+echo "fclose", `grep -rn './' -e 'fclose' --include=\*.{c,h} | wc -l`, ">>>>>>>>>>>>>>>>>>>>>>>>>>>"
+grep -rn './' -e 'fclose'  --include=\*.{c,h} -B 2 -A 2
+echo "fread", `grep -rn './' -e 'fread'  --include=\*.{c,h} | wc -l`, ">>>>>>>>>>>>>>>>>>>>>>>>>>>"
+grep -rn './' -e 'fread'  --include=\*.{c,h} -B 2 -A 2
+echo "fwrite", `grep -rn './' -e 'fwrite'  --include=\*.{c,h} | wc -l`, ">>>>>>>>>>>>>>>>>>>>>>>>>>>"
+grep -rn './' -e 'fwrite'  --include=\*.{c,h} -B 2 -A 2
+echo "API check fin"
+echo "*****************************************"
+
+echo "check (yes) stat/lstat/statfs/acces syscall?"
+echo "stat", `grep -rn './' -e 'stat'  --include=\*.{c,h}  | wc -l`, ">>>>>>>>>>>>>>>>>>>>>>>>>>>"
+grep -rn './' -e 'stat'  --include=\*.{c,h} -B 2 -A 2
+echo "lstat", `grep -rn './' -e 'lstat'  --include=\*.{c,h} | wc -l`, ">>>>>>>>>>>>>>>>>>>>>>>>>>>"
+grep -rn './' -e 'lstat'  --include=\*.{c,h} -B 2 -A 2
+echo "statfs", `grep -rn './' -e 'statfs'  --include=\*.{c,h} | wc -l`, ">>>>>>>>>>>>>>>>>>>>>>>>>>>"
+grep -rn './' -e 'statfs'  --include=\*.{c,h} -B 2 -A 2
+echo "access", `grep -rn './' -e 'access'  --include=\*.{c,h} | wc -l`, ">>>>>>>>>>>>>>>>>>>>>>>>>>>"
+grep -rn './' -e 'access'  --include=\*.{c,h} -B 2 -A 2
+echo "SYSCALL check fin"
+echo "*****************************************"
+
+echo "check free/close"
+echo "free", `grep -rn './' -e 'free'  --include=\*.{c,h} | wc -l`, ">>>>>>>>>>>>>>>>>>>>>>>>>>>"
+grep -rn './' -e 'free'  --include=\*.{c,h} -B 2 -A 2
+echo "close", `grep -rn './' -e 'close'  --include=\*.{c,h} | wc -l`, ">>>>>>>>>>>>>>>>>>>>>>>>>>>"
+grep -rn './' -e 'close'  --include=\*.{c,h} -B 2 -A 2
+echo "free/close check fin"
+echo "*****************************************"
+
+echo "pagesize"
+echo "pagesize", `grep -rn './' -e 'getpagesize'  --include=\*.{c,h} | wc -l`, ">>>>>>>>>>>>>>>>>>>>>>>>>>>"
+grep -rn './' -e 'getpagesize'  --include=\*.{c,h} -A 6
+echo "pagesize check fin"
+echo "*****************************************"
+
+
+echo "proper exit"
+echo "close", `grep -rn './' -e 'exit'  --include=\*.{c,h} | wc -l`, ">>>>>>>>>>>>>>>>>>>>>>>>>>>"
+grep -rn './' -e 'exit'  --include=\*.{c,h} -B 2
+echo "proper exit check fin"
+echo "*****************************************"
+
+echo "getpass()"
+echo "getpass", `grep -rn './' -e 'getpass'  --include=\*.{c,h} | wc -l`, ">>>>>>>>>>>>>>>>>>>>>>>>>>>"
+grep -rn './' -e 'getpass'  --include=\*.{c,h} -B 2
+echo "getpass() check fin"
+echo "*****************************************"
+
+echo "MAKE!!!"
 make
 echo "*****************************************"
+
 echo "Testing start"
 echo "*****************************************"
 
@@ -71,25 +127,25 @@ yes | rm f1
 echo "*****************************************"
 
 echo "Case 1 - Regular ./cipher -e -p <> <f1> <f2>"
-./cipher -e -p face /home/hraman/testing/hw1-hraman/bf_cfb64.c e
+./cipher -e -p face /home/bofeng/HW1-GIT/blowfish/bf_cfb64.c e
 ./cipher -d -p face e d
 echo "Diff :"
 echo "-----------------------------------------"
-diff d /home/hraman/testing/hw1-hraman/bf_cfb64.c
+diff d /home/bofeng/HW1-GIT/blowfish/bf_cfb64.c
 echo "-----------------------------------------"
 sleep 3
 echo "*****************************************"
 echo "Case 2 - stdin/stdout ./cipher -e -p <> - - < f1 > f2"
-./cipher -e -p face - - < /home/hraman/testing/hw1-hraman/bf_cfb64.c > e
+./cipher -e -p face - - < /home/bofeng/HW1-GIT/blowfish/bf_cfb64.c > e
 ./cipher -d -p face - < e d
 echo "Diff :"
 echo "-----------------------------------------"
-diff d /home/hraman/testing/hw1-hraman/bf_cfb64.c
+diff d /home/bofeng/HW1-GIT/blowfish/bf_cfb64.c
 echo "-----------------------------------------"
 sleep 3
 echo "*****************************************"
-echo "Case 3 - stdin/stdout cat /home/hraman/testing/hw1-hraman/bf_cfb64.c | ./cipher -e -p face - d"
-cat /home/hraman/testing/hw1-hraman/bf_cfb64.c | ./cipher -e -p face - e
+echo "Case 3 - stdin/stdout cat /home/bofeng/HW1-GIT/blowfish/bf_cfb64.c | ./cipher -e -p face - d"
+cat /home/bofeng/HW1-GIT/blowfish/bf_cfb64.c | ./cipher -e -p face - e
 echo "-----------------------------------------"
 echo "Display decrypted file"
 echo "-----------------------------------------"
@@ -97,7 +153,7 @@ echo "-----------------------------------------"
 ./cipher -d -p face - < e d
 echo "Diff :"
 echo "-----------------------------------------"
-diff d /home/hraman/testing/hw1-hraman/bf_cfb64.c
+diff d /home/bofeng/HW1-GIT/blowfish/bf_cfb64.c
 echo "-----------------------------------------"
 sleep 3
 echo "*****************************************"
@@ -137,37 +193,37 @@ rm t
 echo "*****************************************"
 echo "Case 8 - Double encryption"
 echo "Result - empty diff"
-./cipher -e -p face /home/hraman/testing/hw1-hraman/bf_cfb64.c e1
+./cipher -e -p face /home/bofeng/HW1-GIT/blowfish/bf_cfb64.c e1
 ./cipher -e -p face e1 e2
 ./cipher -d -p face e2 d2
 ./cipher -d -p face d2 d1
 echo "Diff : "
 echo "-----------------------------------------"
-diff /home/hraman/testing/hw1-hraman/bf_cfb64.c d1
+diff /home/bofeng/HW1-GIT/blowfish/bf_cfb64.c d1
 echo "-----------------------------------------"
 
 echo "*****************************************"
 echo "Case  9a - Test for password prompt"
 echo "Result - Should prompt for password"
-./cipher -e /home/hraman/testing/hw1-hraman/bf_cfb64.c e
+./cipher -e /home/bofeng/HW1-GIT/blowfish/bf_cfb64.c e
 echo "encryption done"
 ./cipher -d e d
 echo "decryption done"
 echo "diff: "
 echo "-----------------------------------------"
-diff d /home/hraman/testing/hw1-hraman/bf_cfb64.c
+diff d /home/bofeng/HW1-GIT/blowfish/bf_cfb64.c
 echo "-----------------------------------------"
 echo "*****************************************"
 echo "Case  9b - Test for password prompt"
 echo "Result - Should prompt for password"
 echo "Give different password"
-./cipher -e /home/hraman/testing/hw1-hraman/bf_cfb64.c e
+./cipher -e /home/bofeng/HW1-GIT/blowfish/bf_cfb64.c e
 echo "encryption done"
 ./cipher -d e d
 echo "decryption done"
 echo "diff: "
 echo "-----------------------------------------"
-diff d /home/hraman/testing/hw1-hraman/bf_cfb64.c
+diff d /home/bofeng/HW1-GIT/blowfish/bf_cfb64.c
 echo "-----------------------------------------"
 echo "*****************************************"
 echo "Extra credit testing"
@@ -175,49 +231,49 @@ echo "*****************************************"
 echo "-s option"
 echo "-p face given with -s"
 echo "should fail"
-./cipher -es -p face /home/hraman/testing/hw1-hraman/bf_cfb64.c e
+./cipher -es -p face /home/bofeng/HW1-GIT/blowfish/bf_cfb64.c e
 echo "-p not given with -s"
 echo "should pass"
-./cipher -es /home/hraman/testing/hw1-hraman/bf_cfb64.c e
+./cipher -es /home/bofeng/HW1-GIT/blowfish/bf_cfb64.c e
 echo "encryption done"
 ./cipher -ds e d
 echo "decryption done"
 echo "diff :"
 echo "-----------------------------------------"
-diff d /home/hraman/testing/hw1-hraman/bf_cfb64.c
+diff d /home/bofeng/HW1-GIT/blowfish/bf_cfb64.c
 echo "-----------------------------------------"
 echo "*****************************************"
 echo "Check for m flag both in e & d"
-./cipher -me /home/hraman/testing/hw1-hraman/bf_cfb64.c e
+./cipher -me /home/bofeng/HW1-GIT/blowfish/bf_cfb64.c e
 ./cipher -md e d
 echo "diff :"
 echo "-----------------------------------------"
-diff d /home/hraman/testing/hw1-hraman/bf_cfb64.c
+diff d /home/bofeng/HW1-GIT/blowfish/bf_cfb64.c
 echo "-----------------------------------------"
 echo "Check for m flag only in e"
-./cipher -me /home/hraman/testing/hw1-hraman/bf_cfb64.c e
+./cipher -me /home/bofeng/HW1-GIT/blowfish/bf_cfb64.c e
 ./cipher -d e d
 echo "diff :"
 echo "-----------------------------------------"
-diff d /home/hraman/testing/hw1-hraman/bf_cfb64.c
+diff d /home/bofeng/HW1-GIT/blowfish/bf_cfb64.c
 echo "-----------------------------------------"
 echo "Check for m flag only in d"
-./cipher -e /home/hraman/testing/hw1-hraman/bf_cfb64.c e
+./cipher -e /home/bofeng/HW1-GIT/blowfish/bf_cfb64.c e
 ./cipher -md e d
 echo "diff :"
 echo "-----------------------------------------"
-diff d /home/hraman/testing/hw1-hraman/bf_cfb64.c
+diff d /home/bofeng/HW1-GIT/blowfish/bf_cfb64.c
 echo "-----------------------------------------"
 echo "*****************************************"
 echo "Check for -E flag"
 echo "should fail"
-./cipher -Ee -p face /home/hraman/testing/hw1-hraman/bf_cfb64.c e
+./cipher -Ee -p face /home/bofeng/HW1-GIT/blowfish/bf_cfb64.c e
 echo "should print random * pass"
-./cipher -Ee /home/hraman/testing/hw1-hraman/bf_cfb64.c e
+./cipher -Ee /home/bofeng/HW1-GIT/blowfish/bf_cfb64.c e
 ./cipher -Ed e d
 echo "diff :"
 echo "-----------------------------------------"
-diff d /home/hraman/testing/hw1-hraman/bf_cfb64.c
+diff d /home/bofeng/HW1-GIT/blowfish/bf_cfb64.c
 echo "-----------------------------------------"
 
 echo "*****************************************"
