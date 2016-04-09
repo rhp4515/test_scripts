@@ -19,9 +19,16 @@ echo "Check clean: Should not print anything"
 make clean 2>&1 | grep "No rule to make target"
 echo "Check clean finish"
 echo "----------------------------------------"
-
 echo ""
+
+echo "Check all-gcc"
+make all-gcc
+echo "Check all-gcc finish"
+echo "*****************************************"
+echo ""
+
 echo "Check prog-XX-gcc"
+make clean 2>&1 | grep "No rule to make target"
 for i in {1..9}
 do
     make prog-0$i-gcc
@@ -34,28 +41,264 @@ echo "Check prog-XX-gcc finish"
 echo "----------------------------------------"
 echo ""
 
-echo "Check run-XX-gcc"
-for i in {1..9}
+echo "Inspect src code, then check target run-XX-gcc"
+for i in {1..2}
 do
+    echo $i
+    echo "grep 'malloc'"
+    echo "Should not find"
+#    grep 'malloc' prog-0$i.c -n
+#    echo "gerp '\['"
+#    echo "Verify index"
+#    grep '\[' prog-0$i.c -n -B 2
+    echo ""
+
     make run-0$i-gcc
     echo "++++++++++++++++++++++++++++++"
     echo ""
 done
-for i in {10..21}
+
+for i in {3..4}
 do
+    echo $i
+    echo "grep 'malloc'"
+    echo "Should find"
+    grep 'malloc' prog-0$i.c -n
+#    echo "gerp '\['"
+#    echo "Verify index"
+#    grep '\[' prog-0$i.c -n -B 2
+    echo ""
+
+    make run-0$i-gcc
+    echo "++++++++++++++++++++++++++++++"
+    echo ""
+done
+
+for i in {5..5}
+do
+    echo $i
+    echo "grep 'NULL'"
+    echo "Should find"
+    grep 'NULL' prog-0$i.c -n
+    echo "grep 'free'"
+    echo "Should find"
+    grep 'free' prog-0$i.c -n
+    echo ""
+
+    make run-0$i-gcc
+    echo "++++++++++++++++++++++++++++++"
+    echo ""
+done
+
+for i in {6..7}
+do
+    echo $i
+    echo "grep 'malloc'"
+    echo "Should not find"
+    grep 'malloc' prog-0$i.c -n
+    echo "grep 'free'"
+    echo "Should find"
+    grep 'free' prog-0$i.c -n
+    echo "grep '"' "
+    echo "7 Should find, 6 don't care"
+    grep '"' prog-0$i.c -n
+    echo ""
+
+    make run-0$i-gcc
+    echo "++++++++++++++++++++++++++++++"
+    echo ""
+done
+
+for i in {8..8}
+do
+    echo $i
+    echo "grep 'free'"
+    echo "Should find twice"
+    grep -E '[^"]free\(.*\)' prog-0$i.c -n
+    echo ""
+
+    make run-0$i-gcc
+    echo "++++++++++++++++++++++++++++++"
+    echo ""
+done
+
+for i in {9..9}
+do
+    echo $i
+    echo "grep 'malloc'"
+    echo "Should not find"
+    grep 'malloc' prog-0$i.c -n
+    echo "grep 'realloc'"
+    echo "Should find"
+    grep 'realloc' prog-0$i.c -n
+    echo ""
+
+    make run-0$i-gcc
+    echo "++++++++++++++++++++++++++++++"
+    echo ""
+done
+
+for i in {10..10}
+do
+    echo $i
+    echo "grep 'malloc'"
+    echo "Should find"
+    grep 'malloc' prog-$i.c -n
+    echo "grep 'free'"
+    echo "Should find"
+    grep -E '[^"]free\(.*\)' prog-$i.c -n
+    echo "grep '*'"
+    echo "Should find after free"
+    grep '*' prog-$i.c -n
+    echo "grep '\['"
+    echo "Should find after free"
+    grep '\[' prog-$i.c -n
+    echo ""
+
     make run-$i-gcc
     echo "++++++++++++++++++++++++++++++"
     echo ""
 done
+
+for i in {11..11}
+do
+    echo $i
+    echo "grep 'NULL/0'"
+    echo "Should find"
+    grep -E 'NULL|0' prog-$i.c -n
+    echo "grep '*'"
+    echo "Should find after NULL"
+    grep '*' prog-$i.c -n
+    echo ""
+
+    make run-$i-gcc
+    echo "++++++++++++++++++++++++++++++"
+    echo ""
+done
+
+for i in {12..12}
+do
+    echo $i
+    echo "grep '='"
+    echo "Should find small num on rhs"
+    grep '=' prog-$i.c -n
+    echo "grep '*'"
+    echo "Should find after ="
+    grep '*' prog-$i.c -n
+    echo ""
+
+    make run-$i-gcc
+    echo "++++++++++++++++++++++++++++++"
+    echo ""
+done
+
+for i in {14..14}
+do
+    echo $i
+    echo "grep 'memcpy'"
+    echo "Should find"
+    grep 'malloc' prog-$i.c -n -B 2 -A 2
+    echo ""
+
+    make run-$i-gcc
+    echo "++++++++++++++++++++++++++++++"
+    echo ""
+done
+
+for i in {18..20}
+do
+    echo $i
+    echo "grep 'memcpy'"
+    echo "Should find, null as one param"
+    echo "for 20, 3rd param == 0"
+    grep '=' prog-$i.c -n
+    echo "grep 'memcpy'"
+    echo ""
+
+    make run-$i-gcc
+    echo "++++++++++++++++++++++++++++++"
+    echo ""
+done
+
+echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+echo "manual check starts"
+
+for i in {13..13}
+do
+    echo $i
+    echo "ptr not aligned"
+    cat prog-$i.c
+    echo ""
+    echo ""
+    echo ""
+
+    make run-$i-gcc
+    echo "++++++++++++++++++++++++++++++"
+    echo ""
+done
+
+for i in {15..15}
+do
+    echo $i
+    echo "compare ptr of different type"
+    cat prog-$i.c
+    echo ""
+    echo ""
+    echo ""
+    echo ""
+
+    make run-$i-gcc
+    echo "++++++++++++++++++++++++++++++"
+    echo ""
+done
+
+for i in {16..16}
+do
+    echo $i
+    echo "illegal ptr created by ptr arithmatic"
+    cat prog-$i.c
+    echo ""
+    echo ""
+    echo ""
+    echo ""
+
+    make run-$i-gcc
+    echo "++++++++++++++++++++++++++++++"
+    echo ""
+done
+
+for i in {17..17}
+do
+    echo $i
+    echo "read uninitialized mem"
+    cat prog-$i.c
+    echo ""
+    echo ""
+    echo ""
+    echo ""
+
+    make run-$i-gcc
+    echo "++++++++++++++++++++++++++++++"
+    echo ""
+done
+
+for i in {21..21}
+do
+    echo $i
+    echo "read popped stack obj"
+    cat prog-$i.c
+    echo ""
+    echo ""
+    echo ""
+    echo ""
+
+    make run-$i-gcc
+    echo "++++++++++++++++++++++++++++++"
+    echo ""
+done
+
 echo "Check run-XX-gcc finish"
 echo "----------------------------------------"
-echo ""
-
-make clean 2>&1 | grep "No rule to make target"
-echo "Check all-gcc"
-make all-gcc
-echo "Check all-gcc finish"
-echo "*****************************************"
 echo ""
 
 cd ../part-3/
