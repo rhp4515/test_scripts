@@ -3,6 +3,13 @@ echo "-------------Cleaning git-------------"
 git clean -fd
 echo "-------------git cleaning done !!!-------------"
 
+git status
+echo "-------------Check for untracked files---------"
+
+ls
+
+sleep 10
+
 echo "-------------Running autoreconf--------------"
 autoreconf -vfi > /dev/null || exit $?
 echo "-------------autoreconf complete !!!-------------"
@@ -193,6 +200,12 @@ echo "------------------------------"
 ./key -p france 40 india
 echo "************************************************************************"
 
+sleep 10
+
+ls -R ../
+echo "Check the folder structure !!!"
+
+sleep 10
 echo "--------------- Showing man page for key-----------"
 man ../man/man1/key.1 | cat
 echo "-- check if the man page has new features listed --"
